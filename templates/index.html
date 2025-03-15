@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ESP32 Camera Stream</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        select, button { padding: 10px; font-size: 16px; margin: 10px; width: 300px; }
+        img { width: 80%; max-width: 800px; border: 2px solid #ccc; margin-top: 20px; }
+        #status { font-weight: bold; color: #007BFF; }
+    </style>
+</head>
+<body>
+    <h1>ESP32 Camera Stream with Nail Detection</h1>
+
+    <div id="status">
+        {% if scanning %}
+            🔄 Scanning network... Click "Complete Scan" once finished.
+        {% endif %}
+    </div>
+
+    <form method="POST">
+        <label for="ip_address">Select Device:</label><br>
+        <select id="ip_address" name="ip_address" required {% if scanning %}disabled{% endif %}>
+            {% for ip, hostname in active_devices %}
+                <option value="{{ ip }}">{{ hostname }} ({{ ip }})</option>
+            {% endfor %}
+        </select><br>
+        <button type="submit" {% if scanning %}disabled{% endif %}>Set IP</button>
+    </form>
+
+    <button id="startScanBtn" onclick="startScan()" {% if scanning %}disabled{% endif %}>Start Scan</button>
+    <button id="completeScanBtn" onclick="refreshPage()">Complete Scan</button>
+
+    {% if camera_url %}
+        <h2>Controls</h2>
+        {% if not streaming %}
+            <a href="{{ url_for('start_stream') }}"><button>Start Stream</button></a>
+        {% else %}
+            <a href="{{ url_for('stop_stream') }}"><button>Stop Stream</button></a>
+        {% endif %}
+            <a href="{{ url_for('capture_image') }}"><button>📸 Capture Image & Detect Nails</button></a>
+    {% endif %}
+
+    {% if camera_url and streaming %}
+        <h2>Live Stream</h2>
+        <img src="{{ url_for('video_feed') }}" alt="Live Stream">
+    {% endif %}
+
+    <script>
+        function startScan() {
+            fetch('/start_scan', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('status').innerText = data.status === "started" 
+                        ? "🔄 Scanning network... Please wait." 
+                        : "✅ Scan already in progress.";
+                });
+        }
+
+        function refreshPage() {
+            location.reload();
+        }
+    </script>
+</body>
+</html>

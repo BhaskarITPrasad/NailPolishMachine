@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>📤 Uploaded File Links</title>
+</head>
+<body>
+    <h2>📤 Uploaded File Links (via file.io)</h2>
+    {% if file_urls %}
+        <ul>
+            <li><strong>Predictions.txt:</strong> <a href="{{ file_urls['predictions'] }}" target="_blank">{{ file_urls['predictions'] }}</a></li>
+            <li><strong>Colour.txt:</strong> <a href="{{ file_urls['colour'] }}" target="_blank">{{ file_urls['colour'] }}</a></li>
+            <li><strong>File URLs JSON:</strong> <a href="{{ file_urls['file_urls_json'] }}" target="_blank">{{ file_urls['file_urls_json'] }}</a></li>
+        </ul>
+    {% else %}
+        <p>🚫 No files uploaded yet.</p>
+    {% endif %}
+    <a href="/">🔙 Back to Home</a>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Stream</title>
+</head>
+<body>
+    <h2>Live Stream from Camera</h2>
+    <img src="{{ url_for('video_feed') }}" width="700" />
+    <form method="POST" action="{{ url_for('capture') }}">
+        <button type="submit">Capture Image</button>
+    </form>
+</body>
+</html>
