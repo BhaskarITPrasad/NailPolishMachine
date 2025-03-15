@@ -1,0 +1,7 @@
+Flask
+requests
+opencv-python
+numpy
+Pillow
+roboflow
+supervision
